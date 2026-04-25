@@ -76,14 +76,13 @@ async function moveTask(req, res) {
       return res.status(403).json({ message: 'You can only move your own tasks' });
     }
 
-    if (nextStatus === 'approved' || nextStatus === 'rejected') {
+    const allowedStatuses = ['todo', 'in_progress', 'submitted'];
+    if (!allowedStatuses.includes(nextStatus)) {
       return res.status(403).json({ message: 'Forbidden' });
     }
 
-    const currentIndex = ['todo', 'in_progress', 'submitted'].indexOf(task.status);
-    const nextIndex = ['todo', 'in_progress', 'submitted'].indexOf(nextStatus);
-    if (nextStatus !== task.status && nextIndex !== currentIndex + 1) {
-      return res.status(403).json({ message: 'Invalid status transition' });
+    if (!allowedStatuses.includes(task.status)) {
+      return res.status(403).json({ message: 'Forbidden' });
     }
   }
 
